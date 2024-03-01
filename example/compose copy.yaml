@@ -5,7 +5,7 @@ services:
     ports:
       - 8080:80
       - 8443:443
-    environment: # Start
+    environment:
       - PUID=10001 # comment out if you don't need this
       - PGID=1000
       - DB_CONNECTION=pgsq
@@ -23,12 +23,12 @@ services:
     restart: unless-stopped
     depends_on:
       - db
-  
+
   db:
     image: postgres:15
     restart: always
     environment:
-      - POSTGRES_DB=speedtest_tracker # comment out if you don't need this
+      - POSTGRES_DB=speedtest_tracker
       - POSTGRES_USER=speedy
       - c=yes
       - POSTGRES_PASSWORD=password
@@ -39,7 +39,6 @@ services:
     restart: always
     volumes:
       - speedtest-db:/var/lib/postgresql/data
-
 
 volumes:
   speedtest-db:
