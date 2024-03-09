@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 from calendar import c
+
 import click
-from icecream import ic
 
 from extract_env import EnvFile
 from extract_env.envlist import EnvList
 
 DEFAULTS = {
-    "env_folder": "./example",
-    "compose_folder": "./example",
+    "env_folder": "./",
+    "compose_folder": "./",
     "combine": True,
     "prefix": "",
     "postfix": "",
@@ -19,6 +19,7 @@ DEFAULTS = {
     "env_file_name": ".env",
     "compose_file": None,
     "all_files": True,
+    "test": False,
 }
 
 
@@ -94,6 +95,13 @@ DEFAULTS = {
     default=DEFAULTS["compose_file"],
     help=f'Update this docker compose file with the new environment variable names, only used with "--one-file".  Default: {DEFAULTS["compose_file"]}',
 )
+@click.option(
+    "-t",
+    "--test",
+    default=DEFAULTS["test"],
+    is_flag=True,
+    help=f'Test the program using files in the example folder.  Default: {DEFAULTS["test"]}',
+)
 @click.help_option("-h", "--help")
 def main(
     all_files,
@@ -108,9 +116,13 @@ def main(
     update_compose,
     use_current_env,
     write,
+    test,
 ):
-    # try:
-    envs = EnvList(
+    if test:
+        env_folder = "./example"
+        compose_folder = "./example"
+
+    EnvList(
         all_files=all_files,
         combine=combine,
         compose_file=compose_file,
@@ -126,9 +138,6 @@ def main(
     )
 
     return 0
-    # except Exception as e:
-    #     ic(e)
-    #     return 1
 
 
 if __name__ == "__main__":

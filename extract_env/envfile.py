@@ -2,12 +2,15 @@ from __future__ import annotations
 
 from collections import OrderedDict
 from pathlib import Path
-from typing import Any, DefaultDict, Optional, Self
-from icecream import ic
+from typing import Any
+from typing import DefaultDict
+from typing import Optional
+from typing import Self
+
 from extract_env.abstract import File
 from extract_env.env import Env
-from extract_env.utils import Source, print_file_to_terminal
-
+from extract_env.utils import Source
+from extract_env.utils import print_file_to_terminal
 
 
 class EnvFile(File):
@@ -30,7 +33,6 @@ class EnvFile(File):
         self.postfix = postfix
         self.use_current_env = use_current_env
         self.env_file_text = file_text
-               
 
         if not self.file_path.exists():
             self.file_path.touch()
@@ -43,7 +45,7 @@ class EnvFile(File):
             self.update_keys()
         else:
             self.envs = OrderedDict()
-        
+
         self.read_file()
 
     @property
@@ -198,7 +200,7 @@ class EnvFile(File):
 
     def append(
         self,
-        env: Env | str | list| OrderedDict,
+        env: Env | str | list | OrderedDict,
         source: Optional[Source] = None,
         line: Optional[int] = None,
         update_keys: bool = True,
@@ -332,10 +334,16 @@ class EnvFile(File):
         }
 
     def update_file(self, display: bool = False, write: bool = True) -> Self:
-        print(f"\nWriting {self.stats["new"]} new environment variable/s of a total {self.stats["total"]} to {self.file_path}\n")
-        
+        print(
+            f'\nWriting {self.stats["new"]} new environment variable/s of a total {self.stats["total"]} to {self.file_path}\n'
+        )
+
         if display:
-            print_file_to_terminal(self.file_path, [str(x) for x in self.envs.values()], display_line_num=True)
+            print_file_to_terminal(
+                self.file_path,
+                [str(x) for x in self.envs.values()],
+                display_line_num=True,
+            )
 
         if write:
             with open(self.file_path, "wt") as file:
@@ -351,8 +359,8 @@ class EnvFile(File):
                 ret_dict[service][env.key] = env
         return ret_dict
 
-    def find_env_service(self, service_name: str, service_key:str) -> Env:
-        """ Find the environment variable linked to a particular service name.
+    def find_env_service(self, service_name: str, service_key: str) -> Env:
+        """Find the environment variable linked to a particular service name.
 
         Args:
             service_name (str): The name of the service to the environment variable is in.
@@ -370,17 +378,25 @@ class EnvFile(File):
             if service_name in env.in_services and service_key in env.service_keys:
                 results.append(env)
         if len(results) > 1:
-            raise ValueError(f"Found more than one environment variable for service '{service_name}'")
+            raise ValueError(
+                f"Found more than one environment variable for service '{service_name}'"
+            )
         elif len(results) == 1:
             return results[0]
-        else: 
-            raise KeyError(f"No environment variable found for service '{service_name}' with key '{service_key}'")
-    
-    def __eq__ (self, other: object) -> bool:
+        else:
+            raise KeyError(
+                f"No environment variable found for service '{service_name}' with key '{service_key}'"
+            )
+
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, EnvFile):
             return NotImplemented
         return self.envs == other.envs and self.file_path == other.file_path
 
+
 if __name__ == "__main__":
     from extract_env.main import main
-    raise SystemExit(main(default_map={"write":False, "display":True, "combine": True}))
+
+    raise SystemExit(
+        main(default_map={"write": False, "display": True, "combine": True})
+    )

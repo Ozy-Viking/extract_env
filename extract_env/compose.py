@@ -1,19 +1,21 @@
 from __future__ import annotations
-from pathlib import Path
-import re
-from typing import Any, DefaultDict, Optional, OrderedDict, Self
-from icecream import ic
-from extract_env.env import Env, EnvService
-from extract_env.abstract import File
-from extract_env.utils import print_file_to_terminal
-from extract_env.abstract import File
 
-from extract_env.yaml_io import (
-    dump_yaml,
-    dump_yaml_to_string_lines,
-    get_comments,
-    load_yaml,
-)
+import re
+from pathlib import Path
+from typing import Any
+from typing import DefaultDict
+from typing import Optional
+from typing import OrderedDict
+from typing import Self
+
+from extract_env.abstract import File
+from extract_env.env import Env
+from extract_env.env import EnvService
+from extract_env.utils import print_file_to_terminal
+from extract_env.yaml_io import dump_yaml
+from extract_env.yaml_io import dump_yaml_to_string_lines
+from extract_env.yaml_io import get_comments
+from extract_env.yaml_io import load_yaml
 
 
 class ComposeFile(File):
@@ -209,7 +211,8 @@ class ComposeFile(File):
                     compose_name=compose_name,
                     env_file_name_base=env_file_name_base,
                 )
-
+        if len(dict_compose_files) == 0:
+            raise FileNotFoundError(f"No compose files found in: {folder.absolute()}")
         return dict_compose_files
 
 

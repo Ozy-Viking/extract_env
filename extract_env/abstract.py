@@ -1,6 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 from pathlib import Path
-from typing import OrderedDict, Self
+from typing import OrderedDict
+from typing import Self
 
 from extract_env.env import Env
 
@@ -14,7 +16,7 @@ class File(ABC):
     @abstractmethod
     def read_file(self) -> Self: ...
     @abstractmethod
-    def update_file(self, write:bool, display: bool) -> Self: ...
+    def update_file(self, write: bool, display: bool) -> Self: ...
 
     @abstractmethod
     def __getitem__(self, key) -> Env: ...
@@ -28,4 +30,3 @@ class File(ABC):
     def __len__(self) -> int: ...
     @abstractmethod
     def keys(self) -> list[str]: ...
-    

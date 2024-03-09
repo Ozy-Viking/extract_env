@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Literal
 
-
 Source = Literal["compose"] | Literal["dot_env"]
 
 

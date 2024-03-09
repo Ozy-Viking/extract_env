@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-
 from collections import OrderedDict
 from pathlib import Path
-from typing import Optional, Self
-from icecream import ic
-from extract_env.compose import ComposeFile
+from typing import Optional
+from typing import Self
+
 from extract_env.abstract import File
+from extract_env.compose import ComposeFile
 from extract_env.envfile import EnvFile
 
 
@@ -64,13 +64,17 @@ class EnvList:
 
     def find_compose_files(self) -> Self:
         if self.all_files:
-            self.compose_files = ComposeFile.find_files(
-                self.compose_folder,
-                combine=self.combine,
-                prefix=self.prefix,
-                postfix=self.postfix,
-                env_file_name_base=self.env_file_name,
-            )
+            try:
+                self.compose_files = ComposeFile.find_files(
+                    compose_folder=self.compose_folder,
+                    combine=self.combine,
+                    prefix=self.prefix,
+                    postfix=self.postfix,
+                    env_file_name_base=self.env_file_name,
+                )
+            except FileNotFoundError as e:
+                print(e)
+                raise SystemExit(1)
         elif not self.all_files:
             raise NotImplementedError("Single compose file not implemented yet")
             # self.compose_files = {

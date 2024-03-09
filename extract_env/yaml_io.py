@@ -1,10 +1,9 @@
-import sys
-from typing import OrderedDict, TextIO
+import io
+from pathlib import Path
+from typing import TextIO
+
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import Comment
-from pathlib import Path
-from icecream import ic
-import io
 
 yaml = YAML(typ="rt")
 yaml.indent(offset=2)
