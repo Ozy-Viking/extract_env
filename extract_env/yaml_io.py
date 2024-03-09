@@ -1,13 +1,15 @@
 import sys
 from typing import OrderedDict, TextIO
 from ruamel.yaml import YAML
-from ruamel.yaml.comments import CommentedSeq, Comment
-from ruamel.yaml.tokens import CommentToken
+from ruamel.yaml.comments import Comment
 from pathlib import Path
 from icecream import ic
+import io
 
 yaml = YAML(typ="rt")
 yaml.indent(offset=2)
+
+output = io.StringIO()
 
 
 def load_yaml(file: Path):
@@ -15,26 +17,49 @@ def load_yaml(file: Path):
         return yaml.load(f)
 
 
+def dump_yaml(data, stream: TextIO | Path = output) -> None:
+    """
+    Dump YAML data to a stream.
 
-def dump_yaml(data, stream: TextIO | Path=sys.stdout):
-    return yaml.dump(data, stream=stream)
+    Args:
+        data: The YAML data to be dumped.
+        stream: The stream to write the YAML data to. It can be a file-like object or a file path.
+    """
+    yaml.dump(data, stream=stream)
+
+
+def dump_yaml_to_string_lines(data) -> list[str]:
+    """
+    Dump YAML data to a list of strings for representing a page.
+
+    Args:
+        data: The YAML data to be dumped.
+
+    Returns:
+        A list of strings representing the YAML data.
+    """
+    yaml.dump(data, stream=output)
+    output.seek(0)
+    return output.readlines()
 
 
 def get_comments(seq) -> dict[int, str]:
+
     comments = Comment()
     if "_yaml_comment" in dir(seq):
-        comments = seq._yaml_comment
+        comments = seq.ca
     else:
         return {}
     ret = {}
 
     for key, comment in comments.items.items():
+        if not comment:
+            continue
         ret[key] = comment[0].value.strip()
     return ret
 
 
 if __name__ == "__main__":
-    compose = Path("example/compose.yaml")
-    data = load_yaml(compose)
+    from extract_env.main import main
 
-    dump_yaml(data)
+    raise SystemExit(main(default_map={"write": False, "display": False}))

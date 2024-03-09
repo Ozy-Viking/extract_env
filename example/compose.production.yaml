@@ -5,9 +5,8 @@ services:
     ports:
       - 8080:80
       - 8443:443
-    environment: # Start
-      - MODE=${MODE}
-      - PUID=${PUID}                   # comment out if you don't need this
+    environment:
+      - PUID=${PUID} # comment out if you don't need this
       - PGID=${PGID}
       - DB_CONNECTION=${DB_CONNECTION}
       - DB_HOST=${DB_HOST}
@@ -15,7 +14,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
-      - c=${c}                   # 2222 comment out if you don't need this
+      - c=${c} # comment out if you don't need this
       - test=${test}
     volumes:
       - /path/to/data:/config
@@ -29,7 +28,7 @@ services:
     image: postgres:15
     restart: always
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}    # 333 comment out if you don't need this
+      - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - c=${c}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -40,8 +39,6 @@ services:
     restart: always
     volumes:
       - speedtest-db:/var/lib/postgresql/data
-    environment:
-      - c=${c}
 
 volumes:
   speedtest-db:

@@ -1,3 +1,7 @@
-from .env import Env, EnvFile
+from .env import Env
+from .env import EnvService
 
-__all__ = ["Env", "EnvFile"]
+from .envfile import EnvFile
+from .compose import ComposeFile
+
+__all__ = ["Env", "EnvFile", "EnvService", "ComposeFile"]
