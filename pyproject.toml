@@ -6,6 +6,11 @@ authors = ["Zack Hankin <admin@hankin.io>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "extract_env" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
