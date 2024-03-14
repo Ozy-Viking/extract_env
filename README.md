@@ -1,8 +1,43 @@
 # Extract Env
 
+A tool for extracting environment variables from compose files and adding them to .env files and replacing them with appropriated parameter expansion. It takes into account preferences for example compose.production.yaml and will produce a .env.production instead. Also, it checks for all 4 version of compose files [see regex for explanation](#regex).
+
+## Example
+
+### From
+
+./docker-compose.local.yaml:
+
+```yaml
+...
+environment:
+  - MODE=Production
+  - PASSWORD=SuperSecretDoNotShare 
+...
+```
+
+### To
+
+./docker-compose.local.yaml:
+
+```yaml
+...
+environment:
+  - MODE=${MODE}
+  - PASSWORD=${PASSWORD} 
+...
+```
+
+./.env.local:
+
+```.env
+MODE=Production
+PASSWORD=SuperSecretDoNotShare
+```
+
 ## CLI
 
-```bash
+```text
 $ extract-env -h
 Usage: extract-env [OPTIONS]
 
@@ -41,4 +76,30 @@ Options:
   -t, --test                      Test the program using files in the example
                                   folder.  Default: False
   -h, --help                      Show this message and exit.
+```
+
+## Mechanics
+
+### Regex
+
+#### Compose File
+
+Used for checking for compose files and extracting their compose name if present.
+
+```regex
+(?P<compose_path>(?:docker-)?compose(?:\.(?P<compose_name>.*))?\.ya?ml)
+```
+
+#### Parameter Expansion
+
+For detecting parameter expansion:
+
+```regex
+(?P<param>(?:^\$\{.*\}$)|(?:^\{\{.*\}\}$))
+```
+
+and for extracting the key from parameter expansion:
+
+```regex
+(?P<param>(?:^\$\{(?P<key1>.*)\}$)|(?:^\{\{(?P<key2>.*)\}\}$))
 ```
