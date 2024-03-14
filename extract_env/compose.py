@@ -2,15 +2,14 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any
 from typing import DefaultDict
 from typing import Optional
 from typing import OrderedDict
 from typing import Self
 
 from extract_env.abstract import File
-from extract_env.env import Env
-from extract_env.env import EnvService
+from extract_env import Env
+from extract_env import EnvService
 from extract_env.utils import print_file_to_terminal
 from extract_env.yaml_io import dump_yaml
 from extract_env.yaml_io import dump_yaml_to_string_lines
@@ -35,6 +34,8 @@ class ComposeFile(File):
         self.prefix = prefix
         self.postfix = postfix
         self.compose_name = compose_name
+        if self.compose_name is None:
+            self.compose_name = self.get_re_compose_name()
         self.env_file_name_base = env_file_name_base
         self.env_services: set[EnvService] = set()
         self.service_envs = DefaultDict(OrderedDict)
@@ -186,6 +187,14 @@ class ComposeFile(File):
         return re.compile(
             r"(?P<compose_path>(?:docker-)?compose(?:\.(?P<compose_name>.*))?\.ya?ml)"
         )
+
+    def get_re_compose_name(self) -> str | None:
+        if match := self.regex_pattern().match(self.file_path.name):
+            return match.group("compose_name")
+
+    def get_re_compose_path(self) -> str | None:
+        if match := self.regex_pattern().match(self.file_path.name):
+            return match.group("compose_path")
 
     @classmethod
     def find_files(

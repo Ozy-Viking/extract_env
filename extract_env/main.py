@@ -1,10 +1,7 @@
 #!/usr/bin/python3
-from calendar import c
-
 import click
 
-from extract_env import EnvFile
-from extract_env.envlist import EnvList
+from extract_env import EnvList
 
 DEFAULTS = {
     "env_folder": "./",
@@ -84,16 +81,20 @@ DEFAULTS = {
     help=f'Update the docker compose file with the new environment variable names.  Default: {DEFAULTS["update"]}',
 )
 @click.option(
-    "-A/-O",
-    "--all-files/--one-file",
+    "-A/-S",
+    "--all-files/--selected-file",
     default=DEFAULTS["all_files"],
     help=f'Update the docker compose file with the new environment variable names.  Default: {DEFAULTS["all_files"]}',
 )
 @click.option(
     "-f",
     "--compose_file",
+    multiple=True,
+    type=click.Path(
+        exists=True, file_okay=True, dir_okay=False, readable=True, writable=True
+    ),
     default=DEFAULTS["compose_file"],
-    help=f'Update this docker compose file with the new environment variable names, only used with "--one-file".  Default: {DEFAULTS["compose_file"]}',
+    help=f'Update this/these docker compose file/s with the new environment variable names. Used for specifying the paths of each file. When paths are specified it is assumed that --selected-files has been given.  Default: {DEFAULTS["compose_file"]}',
 )
 @click.option(
     "-t",
@@ -121,6 +122,10 @@ def main(
     if test:
         env_folder = "./example"
         compose_folder = "./example"
+        compose_file = ("example/compose.yaml", "example/compose.production.yaml")
+        all_files = False
+    if compose_file:
+        all_files = False
 
     EnvList(
         all_files=all_files,
@@ -141,4 +146,4 @@ def main(
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(default_map={"write": False, "display": True}))
+    raise SystemExit(main(default_map={"write": False, "display": True, "test": True}))

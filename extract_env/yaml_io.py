@@ -5,6 +5,7 @@ from typing import TextIO
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import Comment
 
+
 yaml = YAML(typ="rt")
 yaml.indent(offset=2)
 
@@ -16,7 +17,7 @@ def load_yaml(file: Path):
         return yaml.load(f)
 
 
-def dump_yaml(data, stream: TextIO | Path = output) -> None:
+def dump_yaml(data, stream: TextIO | Path) -> None:
     """
     Dump YAML data to a stream.
 
@@ -29,7 +30,7 @@ def dump_yaml(data, stream: TextIO | Path = output) -> None:
 
 def dump_yaml_to_string_lines(data) -> list[str]:
     """
-    Dump YAML data to a list of strings for representing a page.
+    Dumps YAML data to a list of strings for representing a page.
 
     Args:
         data: The YAML data to be dumped.
@@ -43,6 +44,14 @@ def dump_yaml_to_string_lines(data) -> list[str]:
 
 
 def get_comments(seq) -> dict[int, str]:
+    """Gets the comment from a Yaml sequence.
+
+    Args:
+        seq (_type_): A yaml sequence object with comments.
+
+    Returns:
+        dict[int, str]: Comments from the yaml sequence with line number as key.
+    """
 
     comments = Comment()
     if "_yaml_comment" in dir(seq):
