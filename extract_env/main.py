@@ -120,9 +120,9 @@ def main(
     test,
 ):
     if test:
-        env_folder = "./example"
-        compose_folder = "./example"
-        compose_file = ("example/compose.yaml", "example/compose.production.yaml")
+        env_folder = "./testing"
+        compose_folder = "./testing"
+        compose_file = ("testing/compose.yaml", "testing/compose.production.yaml")
         all_files = False
     if compose_file:
         all_files = False

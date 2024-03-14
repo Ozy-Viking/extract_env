@@ -8,8 +8,8 @@ from typing import OrderedDict
 from typing import Self
 
 from extract_env.abstract import File
-from extract_env import Env
-from extract_env import EnvService
+from extract_env.env import Env
+from extract_env.env import EnvService
 from extract_env.utils import print_file_to_terminal
 from extract_env.yaml_io import dump_yaml
 from extract_env.yaml_io import dump_yaml_to_string_lines

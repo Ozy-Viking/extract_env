@@ -5,7 +5,6 @@ from typing import TextIO
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import Comment
 
-
 yaml = YAML(typ="rt")
 yaml.indent(offset=2)
 
